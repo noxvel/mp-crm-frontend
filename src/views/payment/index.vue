@@ -1,45 +1,33 @@
 <template>
   <div class="app-container">
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label="ID" width="100">
         <template slot-scope="{row}">{{ row.id }}</template>
       </el-table-column>
-      <el-table-column label="Serial Number" width="120">
-        <template slot-scope="{row}">{{ row.serialNumber }}</template>
+      <el-table-column label="Contract" width="120">
+        <template slot-scope="{row}">{{ row.treaty.series + row.treaty.number }}</template>
       </el-table-column>
-      <el-table-column label="Name" width="200" align="center">
+      <el-table-column label="Type" width="200" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.name }}</span>
+          <span>{{ row.type }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Description" align="center">
-        <template v-slot="{row}">{{ row.description }}</template>
+      <el-table-column label="Pay Date" align="center">
+        <template v-slot="{row}">
+          <span>{{ row.payDateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
       </el-table-column>
-      <el-table-column label="isActive" width="80" align="center">
-        <template v-slot="{row}">{{ row.isActive }}</template>
+      <el-table-column label="Sum" width="80" align="center">
+        <template v-slot="{row}">{{ row.sum }}</template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/payment-agreement'
+import { fetchList } from '@/api/payment'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -54,6 +42,12 @@ export default {
       return statusMap[status]
     }
   },
+  props: {
+    kind: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       tableKey: 0,
@@ -63,7 +57,6 @@ export default {
       listQuery: {
         importance: undefined,
         title: undefined,
-        type: undefined,
         sort: '+id',
         page: 1,
         limit: 10
@@ -76,7 +69,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchList(this.kind, this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false

@@ -90,8 +90,9 @@ export const constantRoutes = [
       {
         path: 'payment-contract',
         name: 'Payment contract',
-        component: () => import('@/views/payment/contract'),
-        meta: { title: 'Payment contract', icon: 'tree' }
+        component: () => import('@/views/payment/index'),
+        meta: { title: 'Payment contract', icon: 'tree' },
+        props: { kind: 'contract' }
       }
     ]
   },
@@ -118,8 +119,9 @@ export const constantRoutes = [
       {
         path: 'payment-agreement',
         name: 'Payment agreement',
-        component: () => import('@/views/payment/agreement'),
-        meta: { title: 'Payment agreement', icon: 'tree' }
+        component: () => import('@/views/payment/index'),
+        meta: { title: 'Payment agreement', icon: 'tree' },
+        props: { kind: 'agreement' }
       }
     ]
   }

@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label="ID" width="100">
         <template slot-scope="{row}">{{ row.id }}</template>
       </el-table-column>
@@ -20,6 +12,9 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="Cost" width="120">
+        <template slot-scope="{row}">{{ row.cost }}</template>
+      </el-table-column>
       <el-table-column label="Description" align="center">
         <template v-slot="{row}">{{ row.description }}</template>
       </el-table-column>
@@ -28,13 +23,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
 

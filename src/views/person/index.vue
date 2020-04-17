@@ -124,8 +124,6 @@ import {
   update,
   deleteById
 } from '@/api/person'
-import { fetchList as fetchProgramList } from '@/api/program'
-import { fetchList as fetchPersonList } from '@/api/person'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -150,8 +148,6 @@ export default {
   },
   data() {
     return {
-      programList: null,
-      personList: null,
       list: null,
       tableKey: 0,
       total: 0,
@@ -209,20 +205,8 @@ export default {
   },
   created() {
     this.getList()
-    this.getPrograms()
-    this.getPersons()
   },
   methods: {
-    getPrograms() {
-      fetchProgramList().then(response => {
-        this.programList = response.data.items
-      })
-    },
-    getPersons() {
-      fetchPersonList().then(response => {
-        this.personList = response.data.items
-      })
-    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
